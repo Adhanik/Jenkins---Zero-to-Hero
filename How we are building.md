@@ -96,3 +96,17 @@ ubuntu@ip-172-31-88-218:~$
 
 ```
 Our jenkins is up and running now using TF.
+
+# Add S.G and complete Jenkins installation
+
+We have not created S.G tf file, so go to default SG attached to our EC2 Instance, and on that EC2, allow custom tcp traffic on port 8080 from you laptop publicIP.
+
+After this, if you do http://<publicip of your EC2>:8080 ---> you should get the Jenkins set up page.
+
+After selecting the installed plugins, Jenins will be setup for you, and you will get a url where you can access it - http://54.85.182.252:8080/
+
+
+# Jenkins Architecture
+
+Jenkins Architecture was discussed, which you can get in Hero to Zero section.
+
