@@ -232,3 +232,14 @@ After execution, deletes the container. only when there is a request, a containe
   V          V            V  
 
 ```
+
+
+# Multi Stage Multi Agent 
+
+Suppose you have a 3 tier application, frnotend, backend and Database. Database related CI/CD has to be executed on a VM which has CentOS, frontend & backend has to be executed on machine that has Ubuntu or java instlled or oracle installed. How do we solve this problem?
+
+For managing a multi tier application, we will create multiple stages, and initially we will not select any agent, inside the stages, for eg if its a backend stage, and our application is a java, we will declare agent here as maven, similarly for frontend, we will use agent as node or react, and if its DB related thing, we will use any image like mysql
+
+# Creating Multi Stage Multi Agent 
+
+We have created our pipeline where we have created 3 stages, each with their own agent, so it should create 3 containers.Inside mysql, we will run some queries, and never use latest image, always use tag.
