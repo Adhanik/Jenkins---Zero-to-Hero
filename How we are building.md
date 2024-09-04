@@ -176,3 +176,59 @@ A simple jenkins pipeline to verify if the docker slave configuration is working
 Lets try this out with a simple script. We will select - Pipeline script for SCM, which means that we will be picking a pipeline from source code management repository like github, instead of writing it for ourself.
 
 We have created my-first-pipeline folder inside which we have placed our groovy script. We will give this in script path and run it.
+
+# Build the pipeline
+
+So as you know, rn we have only one EC2 instnace and no worker nodes. So where does our build gets executed? As we know, Jenkins master or EC2 is mostly used for scheduling purpose only.
+
+
+Firstly, Jenkins fetches the code from Github, and we see that jenkins pull image 'node:16-alpine', executes node --version, and exists from that container once the build is successful
+
+```
++ node --version
+v16.20.2
+
+docker stop --time=1 e00a0
+$ docker rm -f --volumes e00a
+```
+You can see docker container is deleted
+
+We can see from below, there are no running containers as well
+```
+
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-88-218:~$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND    CREATED        STATUS                    PORTS     NAMES
+7dfc7b463f33   hello-world   "/hello"   13 hours ago   Exited (0) 13 hours ago             zen_napier
+ubuntu@ip-172-31-88-218:~$ 
+
+```
+
+# Summary
+
+Jenkins requested docker to create one container using docker pipeline plugin that we had configured, it asked to give one container so that it can execute my pipeline which is a nodejs application. After execution, jenkins terminated the c1 container
+
+During execution, requests one container
+
+```
+      Jenkins Master
+            |
+            V
+  --------------------------
+  |          |            |
+  V          V            V  
+Container  
+(Docker)   
+```
+After execution, deletes the container. only when there is a request, a container is created. While managing of worker nodes is not that easy, for eg, upgrade. hence docker is used as agent.
+
+```
+      Jenkins Master
+            |
+            V
+  --------------------------
+  |          |            |
+  V          V            V  
+
+```
