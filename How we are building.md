@@ -243,3 +243,44 @@ For managing a multi tier application, we will create multiple stages, and initi
 # Creating Multi Stage Multi Agent 
 
 We have created our pipeline where we have created 3 stages, each with their own agent, so it should create 3 containers.Inside mysql, we will run some queries, and never use latest image, always use tag.
+
+
+We can see containers are created dynamically, inside backend container maven targets are runing, and inside frontend node js related targets are running.
+
+In real life scenario, we will not be running steps like sh 'mvn --version'. We will be running mvn install package , for frontend npm run, npm install all these things
+
+If we do docker ps, we can containers, initially no container, then we see containers, and as soon as steps got executed, it terminates them
+
+```
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+```
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS     NAMES
+24e0dd1e5169   node:16-alpine   "docker-entrypoint.s…"   9 seconds ago   Up 8 seconds             keen_kalam
+ubuntu@ip-172-31-88-218:~$ 
+```
+
+```
+
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS         PORTS                 NAMES
+f9ac9a717d11   mysql:latest   "docker-entrypoint.s…"   10 seconds ago   Up 7 seconds   3306/tcp, 33060/tcp   objective_lichterman
+ubuntu@ip-172-31-88-218:~$ 
+
+
+```
+
+```
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-88-218:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+```
+
+So if our organisation is using VM based approach we should  always look at migrating them to docker based container approach, as it saves the cost , and saves a lot of time also. if here we would be using VM, then we would be managing 3 VM. And suppose wheever nodejs or maven  version is increased, we need to increase it in VM. this all can be avoided using this docker container based approach.
