@@ -113,14 +113,14 @@ You can access it by <public-ip of EC2>:9000
 
 admin admin is Username/Password
 
-![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/Screenshot 2024-09-11 at 2.13.15 PM.png)
+![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/sonarqube.png)
 
 
 So now we know, Maven is already installed as part of docker container, we have intstalled sonar, but now how jenkins will authenticate with Sonar?
 
 Since these are 2 diff applicaiton, we need to go to SonarQube, my account - securtiy , we will generate a token - copy token - Go to jenkins - Manage Jnekins - credentials - system - global cred - add creds - secret text
 
-![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/Screenshot 2024-09-11 at 2.13.58 PM.png)
+![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/cred.png)
 
 So, our Docker, Maven and Sonarkube configuration is done now. For tests, we will consider Unit test only, no extra configuration is needed for them.
 
@@ -149,4 +149,4 @@ http://54.82.159.54:8080/restart
 
 So now we have completed till this step.
 
-![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/Screenshot 2024-09-11 at 2.11.25 PM.png)
+![Screenshot](CI-CD-java-maven-sonar-argocd-helm-k8s/workflow.png)
