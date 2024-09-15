@@ -235,7 +235,7 @@ The docker image that we have defined earlier insdie our agent, we have maven al
 
 # How maven builds java application
 
-mvn clean package inside this will find the pom.xml, which are written by pom.xml. pom.xml is responsible for getting the dependencies runtime, and building the application 
+mvn clean package inside this will find the pom.xml, which are written by developers. pom.xml is responsible for getting the dependencies runtime, and building the application 
 
 Whenever we are writing any application, we will be downloading a lot of dependencies. eg app needs a jar file, we will download the jar file and put it in a dependecy folder, 3rd party tools etc. 
 
@@ -269,15 +269,46 @@ withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN'
                     sh 'cd CI-CD-java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN 
                     -Dsonar.host.url=${SONAR_URL}'
 
-## push image to docker hub
+
+## docker image
+
+    stage('Build and Push Docker Image') {
+      environment {
+        DOCKER_IMAGE = "adminnik/ultimate-cicd:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "CI-CD-java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+        REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
+
+In this step, we are defining docker image name with our docker username and a tag, along with the BUILD_NUMBER.
+
+This build number would be of jenkins, for every run, jenkins gets a new build. that build no we are using here for uniquely identfying each docker image that will be pushed to Github repo.
 
 Since we will be pushing image to docker hub, we need to pass the credentials. ONCE we push it to dockerhub , only then our CD tool like argo CD will be able to deploy that iamge.
 
 so firstly we need to pass docker creds to login to dockerhub and then Jenkins will trigger command to  build the Dockerfile, which will result in docker image and then finally push it to docker hub
 
+
+## push image to docker hub
+
+      steps {
+        script {
+            sh 'cd CI-CD-java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                dockerImage.push()
+            }
+        }
+      }
+    }
+
+
+
 # create the Dockerfile
 
 We have created the Dockerfile
+
+
+
 
 # Update Deployemnt file
 
